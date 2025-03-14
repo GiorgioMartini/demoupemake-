@@ -9,10 +9,10 @@ type VideoT = {
   thumb: string;
 };
 
-function Video({ title, description, sources, subtitle, thumb }: VideoT) {
+function Video({ title, description, sources, subtitle }: VideoT) {
   return (
-    <div>
-      <video width="320" height="240" poster={thumb}>
+    <>
+      <video className="w-full aspect-video" controls>
         {sources.map((source, i) => {
           console.log(source);
           return <source key={i} src={source} />;
@@ -21,7 +21,7 @@ function Video({ title, description, sources, subtitle, thumb }: VideoT) {
       <h3>{title}</h3>
       <h4>{description}</h4>
       <p>{subtitle}</p>
-    </div>
+    </>
   );
 }
 
@@ -38,24 +38,28 @@ function Slider({ videos }: VideosT) {
   // use state for offset videos
   // if main video, play
 
-  const [mainVideo, setMainVideo] = useState();
+  const [mainVideo, setMainVideo] = useState(videos[0]);
 
   return (
     <div>
-      {videos.map((video, i) => {
-        console.log(video);
-        return (
-          <div key={i + video.title}>
-            <Video
-              title={video.title}
-              sources={video.sources}
-              description={video.description}
-              subtitle={video.subtitle}
-              thumb={video.thumb}
-            ></Video>
-          </div>
-        );
-      })}
+      <div className="overflow-hidden">
+        <div className="flex w-full">
+          {videos.map((video, i) =>
+            videos[i].title === mainVideo.title ? (
+              <div key={i + video.title} className="w-full flex-shrink-0">
+                <Video
+                  title={video.title}
+                  sources={video.sources}
+                  description={video.description}
+                  subtitle={video.subtitle}
+                  thumb={video.thumb}
+                />
+              </div>
+            ) : null
+          )}
+          )
+        </div>
+      </div>
     </div>
   );
 }
